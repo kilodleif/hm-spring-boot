@@ -6,10 +6,5 @@ spring:
   freemarker:
     request-context-attribute: rca
 
-
 mybatis:
   mapper-locations: classpath*:/**/*Mapper.xml
-
-
-
-

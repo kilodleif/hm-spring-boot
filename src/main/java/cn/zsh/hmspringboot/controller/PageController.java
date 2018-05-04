@@ -68,6 +68,6 @@ public class PageController {
 
     @RequestMapping(value = "/commentManage")
     public String commentManage() {
-        return "comment_manage.ftl";
+        return "comment_manage";
     }
 }
