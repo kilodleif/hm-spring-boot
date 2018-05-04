@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zsh.hmspringboot.mapper.HmCommentMapper">
+
+    <resultMap id="baseResultMap" type="cn.zsh.hmspringboot.dto.HmComment">
+        <id property="commentId" column="comment_id" jdbcType="DECIMAL"/>
+        <result property="userId" column="user_id" jdbcType="DECIMAL"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectAllComment" resultMap="baseResultMap">
+        SELECT
+            hc.*, hu.account
+        FROM
+            hm_comment hc
+        LEFT JOIN hm_user hu ON hc.user_id = hu.user_id
+        ORDER BY create_time DESC
+    </select>
+</mapper>

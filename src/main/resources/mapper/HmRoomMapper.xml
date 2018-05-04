@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.zsh.hmspringboot.mapper.HmRoomMapper">
+    <resultMap type="cn.zsh.hmspringboot.dto.HmRoom" id="baseResultMap">
+        <id property="roomId" column="room_id" jdbcType="DECIMAL"/>
+        <result property="roomNumber" column="room_number" jdbcType="VARCHAR"/>
+        <result property="roomType" column="room_type" jdbcType="VARCHAR"/>
+        <result property="roomPrice" column="room_price" jdbcType="FLOAT"/>
+    </resultMap>
+
+    <select id="selectFree" parameterType="cn.zsh.hmspringboot.dto.HmRoom" resultMap="baseResultMap">
+        SELECT
+            room_id,room_number,room_type,room_price
+        FROM
+            hm_room
+        <where>
+            <if test="checkinTime!=null and checkoutTime!=null">
+                AND room_id NOT IN (
+                    SELECT DISTINCT
+                      room_id
+                    FROM
+                      hm_room_order
+                    WHERE
+                        (
+                            to_days(#{checkinTime,jdbcType=DATE}) &lt;= to_days(checkin_time)
+                            AND to_days(#{checkoutTime,jdbcType=DATE}) &gt;= to_days(checkout_time)
+                        )
+                        OR (
+                            to_days(#{checkinTime,jdbcType=DATE}) &gt;= to_days(checkin_time)
+                            AND to_days(#{checkinTime,jdbcType=DATE}) &lt;= to_days(checkout_time)
+                        )
+                        OR (
+                            to_days(#{checkoutTime,jdbcType=DATE}) &gt;= to_days(checkin_time)
+                            AND to_days(#{checkoutTime,jdbcType=DATE}) &lt;= to_days(checkout_time)
+                        )
+                )
+            </if>
+            <if test="roomType!=null and roomType!=''">
+                AND room_type = #{roomType}
+            </if>
+        </where>
+    </select>
+</mapper>

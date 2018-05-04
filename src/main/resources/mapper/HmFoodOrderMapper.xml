@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zsh.hmspringboot.mapper.HmFoodOrderMapper">
+    <resultMap id="baseResultMap" type="cn.zsh.hmspringboot.dto.HmFoodOrder">
+        <id property="orderId" column="order_id" jdbcType="DECIMAL"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="orderStatus" column="order_status" jdbcType="VARCHAR"/>
+        <result property="sendAddress" column="send_address" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectFoodOrderWithDetail" resultMap="baseResultMap" parameterType="cn.zsh.hmspringboot.dto.HmFoodOrder">
+        SELECT hfo.*,hu.account FROM hm_food_order hfo LEFT JOIN hm_user hu ON hfo.user_id = hu.user_id
+        <where>
+            <if test="orderStatus!=null and orderStatus!=''">
+                order_status = #{orderStatus}
+            </if>
+        </where>
+    </select>
+</mapper>

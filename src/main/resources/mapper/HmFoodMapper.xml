@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zsh.hmspringboot.mapper.HmFoodMapper">
+
+    <resultMap id="baseResultMap" type="cn.zsh.hmspringboot.dto.HmFood">
+        <id property="foodId" column="food_id" jdbcType="DECIMAL"/>
+        <result property="foodName" column="food_name" jdbcType="VARCHAR"/>
+        <result property="foodPrice" column="food_price" jdbcType="FLOAT"/>
+        <result property="leftAmount" column="left_amount" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="selectFuzzily" resultMap="baseResultMap" parameterType="cn.zsh.hmspringboot.dto.HmFood">
+        SELECT
+            *
+        FROM
+            hm_food
+        <where>
+            <if test="foodName!=null">
+                AND FOOD_NAME LIKE '%'|| #{foodName} || '%'
+            </if>
+            AND left_amount > 0
+        </where>
+    </select>
+</mapper>

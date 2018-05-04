@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zsh.hmspringboot.mapper.HmFoodOrderDetailMapper">
+    <resultMap id="baseResultMap" type="cn.zsh.hmspringboot.dto.HmFoodOrderDetail">
+        <id property="detailId" column="detail_id" jdbcType="DECIMAL"/>
+        <result property="orderId" column="order_id" jdbcType="DECIMAL"/>
+        <result property="amount" column="amount" jdbcType="INTEGER"/>
+        <association property="food" resultMap="cn.zsh.hmspringboot.mapper.HmFoodMapper.baseResultMap" />
+    </resultMap>
+
+    <select id="selectWithFoodName" resultMap="baseResultMap" parameterType="java.lang.Long">
+        SELECT hfod.*,hf.* FROM hm_food_order_detail hfod LEFT JOIN hm_food hf ON hfod.food_id = hf.food_id
+        WHERE order_id = #{orderId}
+    </select>
+
+</mapper>
